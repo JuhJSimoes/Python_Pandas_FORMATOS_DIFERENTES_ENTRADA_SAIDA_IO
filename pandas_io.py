@@ -1,6 +1,8 @@
 import pandas as pd
 import numpy as np
 import html5lib
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 #Criando os nomes 
 
@@ -38,4 +40,51 @@ print(type(cursos), '\n')
 cursos = cursos[0] #transformou a lista em dataframe
 print(type(cursos), '\n')
 print(cursos.head(), '\n')
+
+
+#Alterando o index de cursos
+cursos = cursos.rename(columns={'Nome do curso' : 'nome_do_curso'})
+print(cursos.head(5), '\n')
+
+cursos['id'] = cursos.index+1
+print(cursos.head(5), '\n')
+
+cursos = cursos.set_index('id')
+print(cursos.head(5), '\n')
+
+#Matriculando os alunos nos cursos
+print(nomes.sample(5), '\n')
+
+nomes['matriculas'] = np.ceil(np.random.exponential(size = total_alunos) * 1.5).astype(int)
+print(nomes.sample(10), '\n')
+
+print(nomes.matriculas.describe())
+
+sns.displot(nomes.matriculas)
+#plt.show()
+
+print(nomes.matriculas.value_counts(), '\n')
+
+#Selecionando cursos
+todas_matriculas = []
+x = np.random.rand(20)
+prob = x / sum(x)
+
+for index, row in nomes.iterrows():
+    id = row.id_aluno
+    matriculas = row.matriculas
+    for i in range(matriculas):
+        mat = [id, np.random.choice(cursos.index, p = prob)]
+        todas_matriculas.append(mat)
+        
+matriculas = pd.DataFrame(todas_matriculas, columns=['id_aluno', 'id_curso'])
+print(matriculas.head(),'\n')
+
+print(matriculas.groupby('id_curso').count().join(cursos['nome_do_curso'])
+      .rename(columns = {'id_aluno' : 'quantidade_de_alunos'}), '\n')
+
+matriculas_por_curso = matriculas.groupby('id_curso').count().join(cursos['nome_do_curso']).rename(columns = {'id_aluno' : 'quantidade_de_alunos'})
+
+print(matriculas_por_curso, '\n')
+
 
