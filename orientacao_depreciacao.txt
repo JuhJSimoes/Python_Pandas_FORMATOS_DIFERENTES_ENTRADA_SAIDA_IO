@@ -1,0 +1,26 @@
+        Deprecation
+
+from sqlalchemy import create_engine, MetaData, Table
+
+engine = create_engine('sqlite:///:memory:')
+engine
+type(engine)
+
+matriculas_por_curso.to_sql('matriculas', engine)
+
+print(engine.table_names(), '\n')
+
+
+
+        New
+from sqlalchemy import create_engine, MetaData, Table, inspect 
+# adicionando o método inspect
+
+engine = create_engine('sqlite:///:memory:')
+engine
+type(engine)
+
+matriculas_por_curso.to_sql('matriculas', engine)
+
+inspector = inspect(engine) # criando um Inspector object
+print(inspector.get_table_names()) # Exibindo as tabelas com o inspecto

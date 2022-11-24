@@ -78,13 +78,22 @@ for index, row in nomes.iterrows():
         todas_matriculas.append(mat)
         
 matriculas = pd.DataFrame(todas_matriculas, columns=['id_aluno', 'id_curso'])
+matriculas.to_csv('matriculas.csv', index = False)
 print(matriculas.head(),'\n')
 
 print(matriculas.groupby('id_curso').count().join(cursos['nome_do_curso'])
       .rename(columns = {'id_aluno' : 'quantidade_de_alunos'}), '\n')
 
 matriculas_por_curso = matriculas.groupby('id_curso').count().join(cursos['nome_do_curso']).rename(columns = {'id_aluno' : 'quantidade_de_alunos'})
-
 print(matriculas_por_curso, '\n')
+
+#Saida em diferentes formatos
+
+matriculas_por_curso.to_csv('matriculas_por_curso.csv', index = False)
+matriculas_json = matriculas_por_curso.to_json()
+print(matriculas_json, '\n')
+
+matriculas_html = matriculas_por_curso.to_html()
+print(matriculas_html, '\n')
 
 
