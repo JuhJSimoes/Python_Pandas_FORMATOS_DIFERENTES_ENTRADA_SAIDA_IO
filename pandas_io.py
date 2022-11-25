@@ -33,6 +33,7 @@ nomes['dominio'] = np.random.choice(dominios, total_alunos)
 nomes['email'] = nomes.nome.str.cat(nomes.dominio).str.lower()
 print(nomes.sample(5), '\n')
 
+
 #Criando a tabela de cursos
 url = 'http://tabela-cursos.herokuapp.com/index.html'
 cursos = pd.read_html(url)
@@ -96,4 +97,6 @@ print(matriculas_json, '\n')
 matriculas_html = matriculas_por_curso.to_html()
 print(matriculas_html, '\n')
 
+nomes.to_csv('alunos.csv', sep=',', index = False)
+cursos.to_csv('cursos.csv', sep=',', index = False)
 
