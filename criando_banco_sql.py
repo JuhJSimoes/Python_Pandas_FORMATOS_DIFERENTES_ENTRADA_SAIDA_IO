@@ -26,10 +26,32 @@ print(muitas_matriculas, '\n')
 #Escrevendo no banco
 
 muitas_matriculas.to_sql('muitas_matriculas', con = engine)
-print(engine.table_names())
+inspector = inspect(engine)
+print(inspector.get_table_names(), '\n')
 
 #Nomes dos alunos da proxima turma
 
 matriculas = pd.read_csv('matriculas.csv', sep=',')
-print(matriculas.head(3))
+print(matriculas.head(3), '\n')
 
+id_curso = 15
+proxima_turma = matriculas.query('id_curso == {}'.format(id_curso))
+
+nomes = pd.read_csv('alunos.csv', sep=',')
+cursos = pd.read_csv('cursos.csv', sep=',')
+#proxima_turma = proxima_turma.set_index('id_aluno').join(nomes.set_index('id_aluno'))
+#print(proxima_turma, '\n')
+print(nomes.columns.to_list())
+#proxima_turma = proxima_turma.set_index('id_aluno').join(nomes.set_index('id_aluno'))['nome']
+#print(proxima_turma, '\n')
+proxima_turma = proxima_turma.set_index('id_aluno').join(nomes.set_index('id_aluno'))['nome'].to_frame()
+
+nome_curso = cursos.loc[id_curso]
+print(nome_curso, '\n')
+nome_curso = nome_curso['nome_do_curso']
+print(nome_curso, '\n')
+
+proxima_turma = proxima_turma.rename(columns={'nome': 'Aluno do curso de {}'.format(nome_curso)})
+print(proxima_turma)
+
+proxima_turma.to_excel('proxima_turma.xlsx', index = False)
